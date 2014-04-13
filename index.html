@@ -4,43 +4,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" media="all" rel="stylesheet" type="text/css" />
 
-    <script src="yobidashi.min.js"></script>
-    <script src="henka.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>var googletag=googletag||{};googletag.cmd=googletag.cmd||[];(function(){var a=document.createElement("script");a.async=true;a.type="text/javascript";var c="https:"==document.location.protocol;a.src=(c?"https:":"http:")+"//www.googletagservices.com/tag/js/gpt.js";var b=document.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)})();</script>
     <script src="harmony.js"></script>
     <script>
         $(function () {
-            Harmony.newSlot('MY01', [
-                [970, 30],
-                [728, 90],
-                [300, 250],
-                [88, 31],
-                [615, 30],
-                [120, 90]
-            ], [
-                [[1000, 0], [970, 30]],
-                [[800, 0], [728, 90]],
-                [[640, 0], [615, 30]],
-                [[340, 0], [300, 250]],
-                [[150, 0], [120, 90]],
-                [[0, 0], [88, 31]]
-            ]);
-            Harmony.conf.push(function () {
-                var pubads = googletag.pubads();
-                pubads.enableSingleRequest();
-            });
+            Harmony.newSlot('MY01', [728, 90]);
+            Harmony.newSlot('MY02', [970, 30]);
+            Harmony.newSlot('MY03', [615, 30]);
             Harmony.enableServices();
-            Harmony.display();
-
-            var cb = yobidashi.bind(function () {
-                googletag.pubads().refresh();
-            }, henka);
-            yobidashi.sub('/henka/updated', cb);
         });
     </script>
 </head>
-<body data-henka="[150,340,640,800,1000]">
+<body>
     <div id="div-gpt-ad-MY01" class="ad"></div>
     <div id="div-gpt-ad-MY02" class="ad ad-low"></div>
     <div id="div-gpt-ad-MY03" class="ad ad-low"></div>
