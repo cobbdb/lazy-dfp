@@ -12,20 +12,34 @@ var Harmony = (function () {
                 console.log(log);
             } else {
                 log += '> ' + msg + '\n';
+                try {
+                    if (localStorage.harmonyActiveLog) {
+                        console.log('H> ' + msg);
+                    }
+                } catch (err) {
+                    // Do nothing if no localStorage.
+                }
             }
         },
         enableServices: function () {
             googletag.cmd.push(function () {
                 googletag.enableServices();
                 Harmony.log('DFP services enabled.');
+                Harmony.log('Watching ' + $.waypoints().vertical.length + ' waypoints.');
             });
         },
-        display: function () {
+        display: function (target) {
             googletag.cmd.push(function () {
-                Harmony.slotIDs.forEach(function (id) {
-                    Harmony.log('Displaying id: ' + id);
-                    googletag.display(id);
-                });
+                if (!target) {
+                    var idSet = Harmony.slotIDs;
+                    Harmony.log('Displaying all slots: ' + idSet);
+                    idSet.forEach(function (id) {
+                        googletag.display(id);
+                    });
+                } else {
+                    Harmony.log('Displaying id: ' + target);
+                    googletag.display(target);
+                }
             });
         },
         slot: {},
@@ -44,14 +58,17 @@ var Harmony = (function () {
                 slot.addService(pubads);
 
                 Harmony.slot[id] = slot;
-                Harmony.log('Created slot: ' + id);
+                Harmony.log('Created slot: ' + id + ' inside #' + slotID);
 
                 pubads.addEventListener('slotRenderEnded', function (event) {
                     if (event.slot === slot) {
+                        Harmony.log('slotRenderEnded for ' + id);
                         cb(event);
                         $.trigger('harmony/slotRenderEnded/' + id, event);
                     }
                 });
+
+                
             });
         }
     };
