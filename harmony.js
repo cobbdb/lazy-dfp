@@ -12,12 +12,8 @@ var Harmony = (function () {
                 console.log(log);
             } else {
                 log += '> ' + msg + '\n';
-                try {
-                    if (localStorage.harmonyActiveLog) {
-                        console.log('H> ' + msg);
-                    }
-                } catch (err) {
-                    // Do nothing if no localStorage.
+                if (localStorage['harmony_noisy'] == 'on') {
+                    console.log('H> ' + msg);
                 }
             }
         },
@@ -26,6 +22,12 @@ var Harmony = (function () {
                 googletag.enableServices();
                 Harmony.log('DFP services enabled.');
                 Harmony.log('Watching ' + $.waypoints().vertical.length + ' waypoints.');
+                Harmony.slotIDs.forEach(function (id) {
+                    var visible = $('#' + id).visible(true);
+                    if (visible) {
+                        Harmony.display(id);
+                    }
+                });
             });
         },
         display: function (target) {
@@ -44,31 +46,48 @@ var Harmony = (function () {
         },
         slot: {},
         slotIDs: [],
-        newSlot: function (id, sizes, mapping, cb) {
+        newSlot: function (name, sizes, mapping, cb) {
             mapping = mapping || [];
             cb = cb || $.noop;
             googletag.cmd.push(function () {
-                var slotID = 'div-gpt-ad-' + id;
+                var slotID = 'div-gpt-ad-' + name;
                 Harmony.slotIDs.push(slotID);
 
                 var pubads = googletag.pubads();
                 var slot = googletag.defineSlot(adUnitCode, sizes, slotID);
-                slot.setTargeting('ad_slot', id);
+                slot.setTargeting('ad_slot', name);
                 slot.defineSizeMapping(mapping);
                 slot.addService(pubads);
 
-                Harmony.slot[id] = slot;
-                Harmony.log('Created slot: ' + id + ' inside #' + slotID);
+                Harmony.slot[name] = slot;
+                Harmony.log('Created slot: ' + name + ' inside #' + slotID);
 
                 pubads.addEventListener('slotRenderEnded', function (event) {
                     if (event.slot === slot) {
-                        Harmony.log('slotRenderEnded for ' + id);
+                        Harmony.log('slotRenderEnded for ' + name);
                         cb(event);
-                        $.trigger('harmony/slotRenderEnded/' + id, event);
+                        $.trigger('harmony/slotRenderEnded/' + name, event);
                     }
                 });
 
-                
+                var selector = '#' + slotID;
+                $(selector).waypoint({
+                    handler: function () {
+                        Harmony.display(slotID);
+                    },
+                    offset: -10,
+                    triggerOnce: true
+                });
+                $(selector).waypoint({
+                    handler: function () {
+                        Harmony.display(slotID);
+                    },
+                    offset: function () {
+                        var height = window.innerHeight || $(window).height();
+                        return height + 10;
+                    },
+                    triggerOnce: true
+                });
             });
         }
     };
