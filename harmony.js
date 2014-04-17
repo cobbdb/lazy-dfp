@@ -12,7 +12,7 @@ var Harmony = (function () {
                 console.log(log);
             } else {
                 log += '> ' + msg + '\n';
-                if (localStorage['harmony_noisy'] == 'on') {
+                if (localStorage.harmony_noisy == 'true') {
                     console.log('H> ' + msg);
                 }
             }
