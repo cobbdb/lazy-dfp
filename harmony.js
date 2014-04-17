@@ -38,10 +38,12 @@ var Harmony = (function () {
                     Harmony.log('Displaying all slots: ' + idSet);
                     idSet.forEach(function (id) {
                         googletag.display(id);
+                        $('#' + id).waypoint('destroy');
                     });
                 } else {
                     Harmony.log('Displaying id: ' + target);
                     googletag.display(target);
+                    $('#' + target).waypoint('destroy');
                 }
             });
         },
@@ -78,7 +80,6 @@ var Harmony = (function () {
                     },
                     offset: -10,
                     continuous: false,
-                    triggerOnce: true,
                     enabled: false
                 });
                 $(selector).waypoint({
@@ -90,7 +91,6 @@ var Harmony = (function () {
                         return height + 10;
                     },
                     continuous: false,
-                    triggerOnce: true,
                     enabled: false
                 });
             });
