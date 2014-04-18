@@ -23,12 +23,12 @@ var Harmony = (function () {
                 Harmony.log('DFP services enabled.');
                 $.waypoints('enable');
                 Harmony.log('Watching ' + $.waypoints().vertical.length + ' waypoints.');
-                Harmony.slotIDs.forEach(function (id) {
+                /*Harmony.slotIDs.forEach(function (id) {
                     var visible = $('#' + id).visible(true);
                     if (visible) {
                         Harmony.display(id);
                     }
-                });
+                });*/
             });
         },
         display: function (target) {
@@ -74,14 +74,14 @@ var Harmony = (function () {
                 });
 
                 var selector = '#' + slotID;
-                $(selector).waypoint({
+                /*$(selector).waypoint({
                     handler: function () {
                         Harmony.display(slotID);
                     },
                     offset: -10,
                     continuous: false,
                     enabled: false
-                });
+                });*/
                 $(selector).waypoint({
                     handler: function () {
                         Harmony.display(slotID);
@@ -90,7 +90,7 @@ var Harmony = (function () {
                         var height = window.innerHeight || $(window).height();
                         return height + 10;
                     },
-                    continuous: false,
+                    continuous: true,
                     enabled: false
                 });
             });
