@@ -23,6 +23,14 @@ var Harmony = (function () {
                 Harmony.log('DFP services enabled.');
                 $.waypoints('enable');
                 Harmony.log('Watching ' + $.waypoints().vertical.length + ' waypoints.');
+                /*$('.ad').on('nearViewport', function (event) {
+                    Harmony.display(id);
+                });
+                $('.ad').waypoint()*/
+                $('.ad:near-viewport(10)').each(function () {
+                    var id = $(this).attr('id');
+                    Harmony.display(id);
+                });
                 /*Harmony.slotIDs.forEach(function (id) {
                     var visible = $('#' + id).visible(true);
                     if (visible) {
@@ -74,16 +82,22 @@ var Harmony = (function () {
                 });
 
                 var selector = '#' + slotID;
-                /*$(selector).waypoint({
-                    handler: function () {
+                $(selector).waypoint('near', {
+                    id: slotID,
+                    selector: selector
+                });
+                $(selector).waypoint({
+                    handler: function (direction) {
+                        Harmony.log('top: direction was ' + direction);
                         Harmony.display(slotID);
                     },
                     offset: -10,
                     continuous: false,
                     enabled: false
-                });*/
+                });
                 $(selector).waypoint({
-                    handler: function () {
+                    handler: function (direction) {
+                        Harmony.log('bottom: direction was ' + direction);
                         Harmony.display(slotID);
                     },
                     offset: function () {
