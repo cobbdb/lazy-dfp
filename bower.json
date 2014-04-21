@@ -16,6 +16,6 @@
   ],
   "dependencies": {
     "jquery": "1.11.0",
-    "jquery-beacons": "*"
+    "jquery-beacons": "latest"
   }
 }
