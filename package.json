@@ -1,0 +1,25 @@
+{
+  "name": "lazy-dfp",
+  "version": "0.0.0",
+  "description": "",
+  "main": "harmony.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cobbdb/lazy-dfp.git"
+  },
+  "author": "Dan Cobb <cobbdb@gmail.com> (http://www.github.com/cobbdb)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cobbdb/lazy-dfp/issues"
+  },
+  "homepage": "https://github.com/cobbdb/lazy-dfp",
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-uglify": "~0.4.0",
+    "bower-path": "~1.0.1"
+  }
+}

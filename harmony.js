@@ -12,7 +12,7 @@ var Harmony = (function () {
                 console.log(log);
             } else {
                 log += '> ' + msg + '\n';
-                if (localStorage.harmony_noisy == 'true') {
+                if (localStorage.harmony_noisy === 'true') {
                     console.log('H> ' + msg);
                 }
             }
@@ -21,22 +21,11 @@ var Harmony = (function () {
             googletag.cmd.push(function () {
                 googletag.enableServices();
                 Harmony.log('DFP services enabled.');
-                $.waypoints('enable');
-                Harmony.log('Watching ' + $.waypoints().vertical.length + ' waypoints.');
-                /*$('.ad').on('nearViewport', function (event) {
-                    Harmony.display(id);
+                $.beacons({
+                    range: 150
                 });
-                $('.ad').waypoint()*/
-                $('.ad:near-viewport(10)').each(function () {
-                    var id = $(this).attr('id');
-                    Harmony.display(id);
-                });
-                /*Harmony.slotIDs.forEach(function (id) {
-                    var visible = $('#' + id).visible(true);
-                    if (visible) {
-                        Harmony.display(id);
-                    }
-                });*/
+                $.beacons('enable');
+                Harmony.log('Beacons are enabled.');
             });
         },
         display: function (target) {
@@ -46,12 +35,10 @@ var Harmony = (function () {
                     Harmony.log('Displaying all slots: ' + idSet);
                     idSet.forEach(function (id) {
                         googletag.display(id);
-                        $('#' + id).waypoint('destroy');
                     });
                 } else {
                     Harmony.log('Displaying id: ' + target);
                     googletag.display(target);
-                    $('#' + target).waypoint('destroy');
                 }
             });
         },
@@ -61,17 +48,17 @@ var Harmony = (function () {
             mapping = mapping || [];
             cb = cb || $.noop;
             googletag.cmd.push(function () {
-                var slotID = 'div-gpt-ad-' + name;
-                Harmony.slotIDs.push(slotID);
+                var id = 'div-gpt-ad-' + name;
+                Harmony.slotIDs.push(id);
 
                 var pubads = googletag.pubads();
-                var slot = googletag.defineSlot(adUnitCode, sizes, slotID);
+                var slot = googletag.defineSlot(adUnitCode, sizes, id);
                 slot.setTargeting('ad_slot', name);
                 slot.defineSizeMapping(mapping);
                 slot.addService(pubads);
 
                 Harmony.slot[name] = slot;
-                Harmony.log('Created slot: ' + name + ' inside #' + slotID);
+                Harmony.log('Created slot ' + name + ' inside #' + id);
 
                 pubads.addEventListener('slotRenderEnded', function (event) {
                     if (event.slot === slot) {
@@ -80,33 +67,17 @@ var Harmony = (function () {
                         $.trigger('harmony/slotRenderEnded/' + name, event);
                     }
                 });
+                Harmony.log('Listener for slotRenderEnded attached to ' + name);
 
-                var selector = '#' + slotID;
-                $(selector).waypoint('near', {
-                    id: slotID,
-                    selector: selector
-                });
-                $(selector).waypoint({
-                    handler: function (direction) {
-                        Harmony.log('top: direction was ' + direction);
-                        Harmony.display(slotID);
+                var selector = '#' + id;
+                $(selector).beacon({
+                    handler: function () {
+                        Harmony.display(id);
                     },
-                    offset: -10,
-                    continuous: false,
-                    enabled: false
+                    enabled: false,
+                    runOnce: true
                 });
-                $(selector).waypoint({
-                    handler: function (direction) {
-                        Harmony.log('bottom: direction was ' + direction);
-                        Harmony.display(slotID);
-                    },
-                    offset: function () {
-                        var height = window.innerHeight || $(window).height();
-                        return height + 10;
-                    },
-                    continuous: true,
-                    enabled: false
-                });
+                Harmony.log('Beacon ' + name + ' created.');
             });
         }
     };
