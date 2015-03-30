@@ -7,7 +7,6 @@ module.exports = function (grunt) {
                 files: {
                     'libs/core.min.js': [
                         resolve('jquery'),
-                        resolve('jquery-near-viewport'),
                         resolve('jquery-beacons')
                     ]
                 }
